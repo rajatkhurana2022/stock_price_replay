@@ -22,6 +22,9 @@ class DrawingPanel extends JPanel
     ArrayList<Float> trendlinesx2 = new ArrayList<>();
     ArrayList<Float> trendlinesy2 = new ArrayList<>();
 
+    // highlighted trendline numbers
+    ArrayList<Integer>highlighted_trendlines = new ArrayList<>();
+
     Float tempx1;
     Float tempy1;
     
@@ -66,8 +69,6 @@ class DrawingPanel extends JPanel
             this.plottable_x_coordinates = new ArrayList<>(this.x_coordinates.subList(this.visible_range_min,this.visible_range_max+1));
             this.plottable_y_coordinates = new ArrayList<>(this.y_coordinates.subList(this.visible_range_min,this.visible_range_max+1));
 
-            //System.out.println(this.plottable_x_coordinates);
-
             max_x_coordinate = Collections.max(this.plottable_x_coordinates);
             min_x_coordinate = Collections.min(this.plottable_x_coordinates);
 
@@ -77,16 +78,10 @@ class DrawingPanel extends JPanel
             this.dp_x_size = this.getWidth();
             this.dp_y_size = this.getHeight();
 
-            //System.out.println(this.getWidth());
-
             this.drawing_area_x_length = (0.8F*this.dp_x_size.floatValue());
             this.drawing_area_y_length = (0.8F*this.dp_y_size.floatValue());
 
-            //System.out.println(this.drawing_area_x_length);
-
             this.distances_from_left = new ArrayList<>();
-
-            //System.out.println(this.plottable_x_coordinates.size());
 
             for(Float x_coordinate : this.plottable_x_coordinates)
             {
@@ -171,8 +166,14 @@ class DrawingPanel extends JPanel
                 distance_from_bottom = this.drawing_area_y_length*(trendlinesy2.get(i)-min_y_coordinate)/(max_y_coordinate-min_y_coordinate);
                 float point_y2 = this.drawing_area_y_length-distance_from_bottom;
 
+
                 Line2D l = new Line2D.Float(point_x1,point_y1,point_x2,point_y2);
+
+                if(highlighted_trendlines.contains(i)) {
+                    g2d.setColor(Color.RED);
+                }
                 g2d.draw(l);
+                g2d.setColor(Color.BLACK);
             }
         }
 

@@ -153,6 +153,7 @@ class First_frame extends JFrame {
         panel2.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                panel2.requestFocus();
                 if(panel2.lineDrawingOn)
                 {
                     if(panel2.lineStartDrawn)
@@ -184,6 +185,17 @@ class First_frame extends JFrame {
                         if(dist<4f)
                         {
                             System.out.println("line no "+i);
+
+                            if(panel2.highlighted_trendlines.indexOf(i)!= -1)
+                            {
+                                panel2.highlighted_trendlines.remove(panel2.highlighted_trendlines.indexOf(i));
+                            }
+                            else {
+                                panel2.highlighted_trendlines.add(i);
+                                panel2.requestFocus();
+                            }
+                            System.out.println(panel2.highlighted_trendlines);
+                            panel2.repaint();
                         }
 
                     }
@@ -214,6 +226,35 @@ class First_frame extends JFrame {
             }
         });
 
+        panel2.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_DELETE && !panel2.lineStartDrawn)
+                {
+                    for(int i=0;i<panel2.highlighted_trendlines.size();i++)
+                    {
+                        int trendline_number = panel2.highlighted_trendlines.get(i);
+                        panel2.trendlinesx1.remove(trendline_number);
+                        panel2.trendlinesx2.remove(trendline_number);
+                        panel2.trendlinesy1.remove(trendline_number);
+                        panel2.trendlinesy2.remove(trendline_number);
+                        panel2.highlighted_trendlines.remove((Integer) trendline_number);
+
+                        panel2.repaint();
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
     }
 
     @Override
