@@ -3,8 +3,14 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
 
 class First_frame extends JFrame {
 
@@ -84,7 +90,7 @@ class First_frame extends JFrame {
                             panel2.visible_range_min++;
                             panel2.visible_range_max++;
 
-                            if(panel2.visible_range_max == panel2.x_coordinates.size())
+                            if(panel2.visible_range_max == panel2.dates.size())
                             {
                                 panel2.visible_range_max--;
                                 panel2.visible_range_min--;
@@ -269,66 +275,34 @@ class First_frame extends JFrame {
 
     public void upload_data()
     {
-        panel2.x_coordinates = new ArrayList<>();
+        panel2.dates = new ArrayList<>();
         panel2.y_coordinates = new ArrayList<>();
 
-        panel2.x_coordinates.add(1F);
-        panel2.x_coordinates.add(2F);
-        panel2.x_coordinates.add(3F);
-        panel2.x_coordinates.add(4F);
-        panel2.x_coordinates.add(5F);
-        panel2.x_coordinates.add(6F);
-        panel2.x_coordinates.add(7F);
-        panel2.x_coordinates.add(8F);
-        panel2.x_coordinates.add(9F);
-        panel2.x_coordinates.add(10F);
-        panel2.x_coordinates.add(11F);
-        panel2.x_coordinates.add(12F);
-        panel2.x_coordinates.add(13F);
-        panel2.x_coordinates.add(14F);
-        panel2.x_coordinates.add(15F);
-        panel2.x_coordinates.add(16F);
-        panel2.x_coordinates.add(17F);
-        panel2.x_coordinates.add(18F);
-        panel2.x_coordinates.add(19F);
-        panel2.x_coordinates.add(20F);
-        panel2.x_coordinates.add(21F);
-        panel2.x_coordinates.add(22F);
-        panel2.x_coordinates.add(23F);
-        panel2.x_coordinates.add(24F);
-        panel2.x_coordinates.add(25F);
+        try
+        {
+            BufferedReader br = new BufferedReader(new FileReader("C:/Users/rajat/Downloads/NIFTY 50-13-02-2026-to-13-03-2026.csv"));
+            String line = br.readLine();
+            line = br.readLine();
+            while(line!=null) {
+                String[] data_per_line = line.split(",");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy", Locale.ENGLISH);
+                LocalDate ld = LocalDate.parse(data_per_line[0],formatter);
+                panel2.dates.add(ld);
+                //System.out.println(ld.toString());
 
-        panel2.y_coordinates.add(5F);
-        panel2.y_coordinates.add(3F);
-        panel2.y_coordinates.add(7.8F);
-        panel2.y_coordinates.add(13.2F);
-        panel2.y_coordinates.add(5F);
-        panel2.y_coordinates.add(15F);
-        panel2.y_coordinates.add(3F);
-        panel2.y_coordinates.add(7.8F);
-        panel2.y_coordinates.add(13.2F);
-        panel2.y_coordinates.add(5F);
-        panel2.y_coordinates.add(5F);
-        panel2.y_coordinates.add(20F);
-        panel2.y_coordinates.add(7.8F);
-        panel2.y_coordinates.add(13.2F);
-        panel2.y_coordinates.add(5F);
-        panel2.y_coordinates.add(1F);
-        panel2.y_coordinates.add(3F);
-        panel2.y_coordinates.add(4F);
-        panel2.y_coordinates.add(7F);
-        panel2.y_coordinates.add(5F);
-        panel2.y_coordinates.add(6F);
-        panel2.y_coordinates.add(3F);
-        panel2.y_coordinates.add(4F);
-        panel2.y_coordinates.add(5F);
-        panel2.y_coordinates.add(2F);
+                float y_coordinate = Float.parseFloat(data_per_line[1]);
+                panel2.y_coordinates.add(y_coordinate);
+                //System.out.println(y_coordinate);
+
+                line = br.readLine();
+            }
+            panel2.data_uploaded = true;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
 
 
-        //System.out.println(panel2.x_coordinates.size());
-
-
-
-        panel2.data_uploaded = true;
     }
 }
